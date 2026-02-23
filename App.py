@@ -3,7 +3,6 @@ import pandas as pd
 from library import add_book, borrow_book, return_book, view_books
 from book_data import books
 
-st.set_page_config(page_title="Library-Management-System", layout="wide")
 
 # --- ULTIMATE AESTHETIC THEME ---
 st.markdown("""
@@ -154,3 +153,4 @@ elif menu == "📊 View Records":
     else:
 
         st.warning("Invalid Book ID. Please try again.")
+
