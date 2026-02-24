@@ -148,10 +148,26 @@ elif menu == "📊 View Records":
     st.markdown('<div class="aesthetic-header"><h1>📊 Library Records Table</h1></div>', unsafe_allow_html=True)
     raw_data = view_books()
     if raw_data:
-        table_data = [{"ID": k, **v} for k, v in raw_data.items()]
+        table_data = []
+        for k, v in raw_data.items():
+            table_data.append({
+                "ID": k,
+                "Title": v.get("title"),
+                "Status": v.get("status"),
+                "Borrower": v.get("borrower"),
+                "Course": v.get("course"),
+                "Section": v.get("section"),
+                "Due Date": v.get("due_date", "N/A"),  # Added Due Date column
+                "Borrowed On": v.get("date_borrow"),
+                "Returned On": v.get("date_return"),
+                "Fine": v.get("fine", "0.00"),
+                "Note": v.get("note", "None")
+            })
+
         df = pd.DataFrame(table_data)
         st.dataframe(df, use_container_width=True, hide_index=True)
     else:
 
-        st.warning("Invalid Book ID. Please try again.")
+        st.warning("Invalid Book ID.")
+
 
