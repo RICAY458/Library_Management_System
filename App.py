@@ -5,10 +5,10 @@ from book_data import books
 
 st.set_page_config(page_title="Library-Management-System", layout="wide")
 
-# --- ULTIMATE AESTHETIC THEME ---
+# --- DESIGN ---
 st.markdown("""
     <style>
-    /* 1. Animated Gradient Background */
+    /* 1. Background */
     .stApp {
         background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
         background-size: 400% 400%;
@@ -21,14 +21,18 @@ st.markdown("""
         100% { background-position: 0% 50%; }
     }
 
-    /* 2. FORCE FORM LABELS TO WHITE */
+    header[data-testid="stHeader"] {
+        background: rgba(0,0,0,0) !important; /* Makes it transparent */
+    }
+
+    /* 2.FORM LABELS */
     .stWidgetLabel p, label, .stMarkdown p {
         color: white !important;
         font-weight: 600 !important;
         text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
     }
 
-    /* 3. Main Container - Frosted Glass */
+    /* 3. Main Container */
     div.block-container {
         background: rgba(255, 255, 255, 0.1); 
         backdrop-filter: blur(15px);
@@ -40,7 +44,7 @@ st.markdown("""
         margin-top: 2rem;
     }
 
-    /* 4. Aesthetic Header Boxes */
+    /* 4.Header Boxes */
     .aesthetic-header {
         background: linear-gradient(90deg, #2e3192 0%, #1bffff 100%);
         color: white !important;
@@ -51,7 +55,7 @@ st.markdown("""
         margin-bottom: 25px;
     }
 
-    /* 5. BUTTON STYLING - BLACK TEXT */
+    /* 5. BUTTON STYLING */
     .stButton>button {
         background: linear-gradient(to right, #2e3192, #1bffff) !important;
         color: black !important; /* Changed word color to black */
@@ -89,14 +93,14 @@ st.markdown("""
 
 # --- SIDEBAR (Books Icon) ---
 with st.sidebar:
-    st.markdown("# 📚 LMS")
-    st.write("Library Management System")
+    st.markdown("# 📚 LBMS")
+    st.write("Library Book Management System")
     st.divider()
     menu = st.radio("MAIN MENU", ["🏠 Dashboard", "➕ Add Book", "📖 Borrow Book", "🔄 Return Book", "📊 View Records"])
 
 # ---------------- DASHBOARD ----------------
 if menu == "🏠 Dashboard":
-    st.markdown('<div class="aesthetic-header"><h1>📊 Dashboard Overview</h1></div>', unsafe_allow_html=True)
+    st.markdown('<div class="aesthetic-header"><h1>📊 Dashboard </h1></div>', unsafe_allow_html=True)
     total = len(books)
     borrowed = sum(1 for info in books.values() if info.get("status") == "Borrowed")
     available = total - borrowed
@@ -169,5 +173,6 @@ elif menu == "📊 View Records":
     else:
 
         st.warning("Invalid Book ID.")
+
 
 
