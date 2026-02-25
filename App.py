@@ -181,5 +181,5 @@ elif menu == "📊 View Records":
         df = pd.DataFrame(table_data)
         st.dataframe(df, use_container_width=True, hide_index=True)
     else:
-        st.warning("Invalid input ID. Please try again!")
+        st.warning("No books registered in the sytem.")
 
