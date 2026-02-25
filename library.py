@@ -1,7 +1,5 @@
 from book_data import books
-from utils import calculate_fine
-from datetime import datetime, timedelta
-
+from datetime import datetime, timedelta 
 
 def add_book(book_id, title):
     if book_id in books:
@@ -16,12 +14,12 @@ def add_book(book_id, title):
         "purpose": None,
         "date_borrow": None,
         "due_date": None,
-        "date_return": None
+        "date_return": None,
+        "fine": "0.00",
+        "note": "None"
     }
     return "Book added successfully!"
 
-
-# Added course, section, and purpose parameters
 def borrow_book(book_id, borrower, course, section, purpose):
     if book_id not in books:
         return "Invalid Book ID!"
@@ -29,6 +27,7 @@ def borrow_book(book_id, borrower, course, section, purpose):
     if books[book_id]["status"] == "Borrowed":
         return "Book is already borrowed."
 
+    # Use date only (no time) as requested
     borrow_date = datetime.now()
     due_date = borrow_date + timedelta(days=7)
 
@@ -38,36 +37,46 @@ def borrow_book(book_id, borrower, course, section, purpose):
         "course": course,
         "section": section,
         "purpose": purpose,
-        "date_borrow": borrow_date.strftime("%Y-%m-%d %H:%M"),
-        "due_date": due_date,
-        "date_return": "N/A"
+        # Formatted to YYYY-MM-DD
+        "date_borrow": borrow_date.strftime("%Y-%m-%d"),
+        "due_date": due_date.strftime("%Y-%m-%d"),
+        "date_return": "N/A",
+        "fine": "0.00",
+        "note": "Borrowed"
     })
 
-    return f"Book borrowed successfully! Due: {due_date.strftime('%Y-%m-%d')}"
+    return f"Book borrowed successfully! Due: {books[book_id]['due_date']}"
 
-
-def return_book(book_id):
+def return_book(book_id, return_date_str):
     if book_id not in books:
         return "Invalid Book ID!"
 
     if books[book_id]["status"] == "Available":
         return "Book is not currently borrowed."
 
-    fine = calculate_fine(books[book_id]["due_date"])
+    # Logic to identify if the return is on time or late
+    due_date_obj = datetime.strptime(books[book_id]["due_date"], "%Y-%m-%d")
+    return_date_obj = datetime.strptime(return_date_str, "%Y-%m-%d")
 
-    # Record the return date before clearing
-    books[book_id]["date_return"] = datetime.now().strftime("%Y-%m-%d %H:%M")
+    # Calculate difference
+    delay = (return_date_obj - due_date_obj).days
+
+    if delay > 0:
+        fine_amount = delay * 10.00 # Automatically calculates 10 pesos per day
+        books[book_id]["fine"] = f"{fine_amount:.2f}"
+        books[book_id]["note"] = f"Late by {delay} day(s)"
+    else:
+        books[book_id]["fine"] = "0.00"
+        books[book_id]["note"] = "Returned on time"
+
+    books[book_id]["date_return"] = return_date_str
     books[book_id]["status"] = "Available"
-    books[book_id]["borrower"] = None
-    # We keep the other data or clear it based on preference;
-    # here we clear for the next borrower
-    books[book_id]["due_date"] = None
+    books[book_id]["borrower"] = "None"
 
-    if fine > 0:
-        return f"Book returned late! Fine: ₱{fine}"
+    if delay > 0:
+        return f"Book returned late! Fine: ₱{books[book_id]['fine']}"
     else:
         return "Book returned on time. No fine."
-
 
 def view_books():
     return books
