@@ -143,9 +143,19 @@ elif menu == "📖 Borrow Book":
 # ---------------- RETURN BOOK ----------------
 elif menu == "🔄 Return Book":
     st.markdown('<div class="aesthetic-header"><h1>🔄 Return Portal</h1></div>', unsafe_allow_html=True)
-    book_id = st.text_input("Enter Book ID to Return")
-    if st.button("Submit Return"):  # This word is now BLACK
-        st.success(return_book(book_id))
+
+    col1, col2 = st.columns(2)
+    with col1:
+        book_id = st.text_input("Enter Book ID to Return")
+    with col2:
+        # User now selects the return date manually
+        return_date_input = st.date_input("Select Return Date")
+
+    if st.button("Submit Return"):
+        if book_id:
+            # We pass the selected date to our function
+            result = return_book(book_id, return_date_input.strftime('%Y-%m-%d'))
+            st.success(result)
 
 # ---------------- VIEW RECORDS ----------------
 elif menu == "📊 View Records":
@@ -173,6 +183,7 @@ elif menu == "📊 View Records":
     else:
 
         st.warning("Invalid Book ID.")
+
 
 
 
