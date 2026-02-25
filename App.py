@@ -5,7 +5,7 @@ from book_data import books
 
 st.set_page_config(page_title="Library-Management-System", layout="wide")
 
-# --- ULTIMATE AESTHETIC THEME ---
+# --- DESIGN ---
 st.markdown("""
     <style>
     /* 1. Animated Gradient Background */
@@ -93,14 +93,14 @@ st.markdown("""
 
 # --- SIDEBAR (Books Icon) ---
 with st.sidebar:
-    st.markdown("# 📚 LMS")
-    st.write("Library Management System")
+    st.markdown("# 📚 LBMS")
+    st.write("Library Book Management System")
     st.divider()
     menu = st.radio("MAIN MENU", ["🏠 Dashboard", "➕ Add Book", "📖 Borrow Book", "🔄 Return Book", "📊 View Records"])
 
 # ---------------- DASHBOARD ----------------
 if menu == "🏠 Dashboard":
-    st.markdown('<div class="aesthetic-header"><h1>📊 Dashboard Overview</h1></div>', unsafe_allow_html=True)
+    st.markdown('<div class="aesthetic-header"><h1>📊 Dashboard </h1></div>', unsafe_allow_html=True)
     total = len(books)
     borrowed = sum(1 for info in books.values() if info.get("status") == "Borrowed")
     available = total - borrowed
@@ -181,4 +181,5 @@ elif menu == "📊 View Records":
         df = pd.DataFrame(table_data)
         st.dataframe(df, use_container_width=True, hide_index=True)
     else:
-        st.warning("No books registered in the system.")
+        st.warning("Invalid input ID. Please try again!")
+
